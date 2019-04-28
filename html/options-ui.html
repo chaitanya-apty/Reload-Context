@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Reload Extension Options...</title>
+    <script type="text/javascript" src="../js/utils/chrome-helpers.js"></script>
+    <script type="text/javascript" src="../js/utils/utils.js"></script>
+    <script type="text/javascript" src="../js/background/options.js"></script>
+</head>
+<style>
+    body {
+    background-color: gold;
+    }
+
+    div {
+        display: block;
+        margin: 1em;
+    }
+
+    form,textarea {
+        font-size: 15px;
+    }
+
+    label {
+        font-weight: 500;
+    }
+    #saveOptions {
+        text-shadow: 1px 1px 2px lightblue;
+        display: inline-block;
+        width: 10em;
+    }
+    textarea,i {
+        display: inherit;
+    }
+</style>
+
+<body>
+    <div style="float:left">
+     <img src="../images/96x96.png">
+    </div>
+    <div style="clear:both"></div>
+    <div>
+        <form form name='Options'>
+
+            <div>
+                <label for="filterUrls"><b>Filter Urls</b>: 
+                   ( Add Multiple URLS(or)Regex Pattern with comma (,) seperated )
+                </label>
+                <i>Note: Urls matching Regex will not be reloaded.</i>
+                <textarea name='filterUrls' id="filterUrl"></textarea>
+            </div>
+
+            <div id='ext-parent'> 
+                <!-- Dynamic List will be created from JS -->
+                <b>Select Extensions To Reload</b>:
+            </div>
+    
+            <div>
+                <label for="notify"><b>Allow Notifications</b>:</label>
+                <input id="notify" type='checkbox' name='notify'>
+            </div>
+            <div>
+                <input id="saveOptions" type="button" value="Update"/>
+                <span id="showStatus" style="display: none">Details Saved Successfully..!</span>
+            </div>
+
+        </form>
+    </div>
+
+</body>
+
+</html>
