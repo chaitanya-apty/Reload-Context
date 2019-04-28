@@ -47,8 +47,7 @@ const saveOptions = async () => {
         // Store Details
         storeDetails.filterUrls = filterUrlValue; 
         storeDetails.notify = notification;
-        const extensionList = getSelectedExtensions();
-        storeDetails.extensions = extensionList;
+        storeDetails.extensions = getSelectedExtensions();
 
         await ChromeHelpers.storeValue(APP_OPTIONS,storeDetails);
         showStatus();
