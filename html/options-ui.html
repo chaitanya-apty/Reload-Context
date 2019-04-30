@@ -9,7 +9,7 @@
 </head>
 <style>
     body {
-    background-color: gold;
+    background-color: teal;
     }
 
     div {
@@ -18,7 +18,7 @@
     }
 
     form,textarea {
-        font-size: 15px;
+        font-size: 20px;
     }
 
     label {
@@ -43,11 +43,9 @@
         <form form name='Options'>
 
             <div>
-                <label for="filterUrls"><b>Filter Urls</b>: 
-                   ( Add Multiple URLS(or)Regex Pattern with comma (,) seperated )
+                <label for="filterUrls"><b>Prefer Urls to reload (regex / url)</b>: 
                 </label>
-                <i>Note: Urls matching Regex will not be reloaded.</i>
-                <textarea name='filterUrls' id="filterUrl"></textarea>
+                <textarea rows="5" cols="50" name='filterUrls' id="filterUrl"></textarea>
             </div>
 
             <div id='ext-parent'> 
@@ -61,7 +59,7 @@
             </div>
             <div>
                 <input id="saveOptions" type="button" value="Update"/>
-                <span id="showStatus" style="display: none">Details Saved Successfully..!</span>
+                <span id="showStatus" style="display: none">&#10003; Details Saved Successfully..</span>
             </div>
 
         </form>

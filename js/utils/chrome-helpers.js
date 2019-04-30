@@ -12,7 +12,7 @@ var ChromeHelpers = {
                return resolve(data);
             }
              const keyValue = data ? data[prop] : null;
-             return resolve(keyValue);;
+             return resolve(keyValue);
           }
       });
     },

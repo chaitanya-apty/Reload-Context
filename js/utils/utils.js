@@ -24,7 +24,7 @@ var utilityHelpers = {
     },
     isUrlFiltered: async (url)=> {
       const urls = await ChromeHelpers.getStorageValue('filterUrls');
-      for (filter of urls) {
+      for (const filter of urls) {
         const regex = new RegExp(filter);
         if(filter && url.match(regex)) { // filter&regex value can be '', will optimise later
           return true;

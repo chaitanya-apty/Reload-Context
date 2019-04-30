@@ -29,7 +29,7 @@ class ReloadChromeExtension {
     chrome.tabs.query({ active: true, lastFocusedWindow: true }, async (tabs) => {
       if(tabs.length) {
         // Regex Urls || Chrome Pages will not be reloaded
-        if (!tabs[0].url.includes('chrome:') && !await utilityHelpers.isUrlFiltered(tabs[0].url)) {
+        if (!tabs[0].url.includes('chrome:') && await utilityHelpers.isUrlFiltered(tabs[0].url)) {
           chrome.tabs.reload(tabs[0].id);
           utilityHelpers.notifyUser();
         }
