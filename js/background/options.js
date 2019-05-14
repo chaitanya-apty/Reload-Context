@@ -74,6 +74,7 @@ const loadExtensionsPreview = async (storedExtensions)=> {
         input.type = 'checkbox';
         input.name = CHECKBOX_NAME;
         input.id = installed.id;
+        input.classList.add('w3-check');
         input.checked = utilityHelpers.isExtensionStored(installed.id, storedExtensions);
 
         // Initialising Label Props
