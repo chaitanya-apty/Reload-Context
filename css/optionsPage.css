@@ -1,0 +1,41 @@
+body {
+    background-color: teal;
+    }
+
+    div {
+        display: block;
+        margin: 1em;
+    }
+
+    form,textarea {
+        font-size: 19.5px;
+    }
+
+    label {
+        font-weight: 500;
+    }
+    label input[type='checkbox'] {
+        margin-right: 10px
+    }
+    #saveOptions {
+        display: inline-block;
+        width: 10em;
+    }
+    textarea {
+        display: block;
+        width: 10%;
+        height: 75px;
+        padding: 12px 20px;
+        box-sizing: border-box;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+        background-color: #f8f8f8;
+        font-size: 26px;
+        resize: none;
+        -webkit-transition: width 0.4s, height 0.5s ease-in-out;
+        transition: width 0.4, height 0.5s ease-in-out;
+    }
+    textarea:focus {
+        width: 30%;
+        height: 100px
+    }

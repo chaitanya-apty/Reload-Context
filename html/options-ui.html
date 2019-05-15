@@ -5,79 +5,40 @@
     <title>Reload Extension Options...</title>
     <script type="text/javascript" src="../js/utils/chrome-helpers.js"></script>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="../css/optionsPage.css">
+    <link rel="stylesheet" href="../css/tooltip.css">
     <script type="text/javascript" src="../js/utils/utils.js"></script>
     <script type="text/javascript" src="../js/background/options.js"></script>
 </head>
-<style>
-    body {
-    background-color: teal;
-    }
-
-    div {
-        display: block;
-        margin: 1em;
-    }
-
-    form,textarea {
-        font-size: 19.5px;
-    }
-
-    label {
-        font-weight: 500;
-    }
-    label input[type='checkbox'] {
-        margin-right: 10px
-    }
-    #saveOptions {
-        display: inline-block;
-        width: 10em;
-    }
-    textarea {
-        display: block;
-        width: 10%;
-        height: 75px;
-        padding: 12px 20px;
-        box-sizing: border-box;
-        border: 2px solid #ccc;
-        border-radius: 4px;
-        background-color: #f8f8f8;
-        font-size: 26px;
-        resize: none;
-        -webkit-transition: width 0.4s, height 0.5s ease-in-out;
-        transition: width 0.4, height 0.5s ease-in-out;
-    }
-    textarea:focus {
-        width: 30%;
-        height: 100px
-    }
-    
-</style>
 
 <body>
     <div style="float:left">
-     <img src="../images/96x96.png">
+        <img src="../images/96x96.png">
     </div>
     <div style="clear:both"></div>
     <div>
-        <form name='Options'  class="w3-container">
+        <form name='Options' class="w3-container">
 
             <div>
-                <label for="filterUrls"><b>Prefer Urls to reload (regex / url)</b>: 
+                <label for="filterUrls"><b>Prefer Urls to reload (regex / url)</b>:
+                    <span class="tooltip">&#9997;
+                        <span class="tooltiptext">Ex: https://*/*, www.ReloadThisUrl.com</span>
+                    </span>
                 </label>
                 <textarea rows="5" cols="50" name='filterUrls' id="filterUrl"></textarea>
             </div>
 
-            <div id='ext-parent'> 
+            <div id='ext-parent'>
                 <!-- Dynamic List will be created from JS -->
                 <b>Select Extensions To Reload</b>:
             </div>
-    
+
             <div>
                 <label for="notify"><b>Allow Notifications</b>:</label>
-                <input id="notify" class="w3-check"type='checkbox' name='notify'>
+                <input id="notify" class="w3-check" type='checkbox' name='notify'>
             </div>
             <div>
-                <input id="saveOptions" class='w3-btn w3-black' type="button" value="Update"/>
+                <input id="saveOptions" class='w3-btn w3-black' type="button" value="Update" />
                 <span id="showStatus" style="display: none">&#10003; Details Saved Successfully..</span>
             </div>
 

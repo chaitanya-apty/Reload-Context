@@ -17,12 +17,14 @@ const loadOptions = async () => {
     try {
         // Listen to Form Changes
         document.getElementById('saveOptions').addEventListener('click', saveOptions);
+        
+        // Fetch Stored Data
+        const data = await ChromeHelpers.getStorageValue(APP_OPTIONS);
+        loadExtensionsPreview(data && data.extensions || []);
 
         const filterTag = document.getElementById('filterUrl');
         const notifyTag = document.getElementById('notify');
         
-        const data = await ChromeHelpers.getStorageValue(APP_OPTIONS);
-        loadExtensionsPreview(data && data.extensions || []);
         
         if (!data) {
             filterTag.value = storeDetails.filterUrls;
@@ -36,7 +38,6 @@ const loadOptions = async () => {
     } catch(e) {
         console.log('Failed to Retrieve Options')
     }
-    
 };
 
 const saveOptions = async () => {
@@ -60,6 +61,7 @@ const saveOptions = async () => {
 const loadExtensionsPreview = async (storedExtensions)=> {
     const extParentElement = document.getElementById('ext-parent');
     
+    // Pulling Extensions Again From Chrome API
     const extensionsDetails = await ChromeHelpers.getAllExtesions();
     for(const installed of extensionsDetails) {
         if(installed.name === 'Reload') {
@@ -99,8 +101,7 @@ function getSelectedExtensions() {
     extensionList = choosenExtensions.reduce((total, Element) => {
         if (!Element.checked) { return total; } // Only Selected Extensions considered
         return [...total, { 
-            id: Element.id, 
-            name: document.querySelector(`label[for=${Element.id}`).textContent 
+            id: Element.id
         }];
     }, []);
     return extensionList;
