@@ -3,10 +3,11 @@
 
 <head>
     <title>Reload Extension Options...</title>
-    <script type="text/javascript" src="../js/utils/chrome-helpers.js"></script>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="../css/optionsPage.css">
     <link rel="stylesheet" href="../css/tooltip.css">
+
+    <script type="text/javascript" src="../js/utils/chrome-helpers.js"></script>
     <script type="text/javascript" src="../js/utils/utils.js"></script>
     <script type="text/javascript" src="../js/background/options.js"></script>
 </head>
@@ -21,27 +22,44 @@
 
             <div>
                 <label for="filterUrls"><b>Prefer Urls to reload (regex / url)</b>:
-                    <span class="tooltip">&#9997;
-                        <span class="tooltiptext">Ex: https://*/*, www.ReloadThisUrl.com</span>
-                    </span>
+                    <span class="tooltip">&#9997;<span class="tooltiptext">Ex: https://*/*,www.ReloadThisUrl.com</span></span>
                 </label>
                 <textarea rows="5" cols="50" name='filterUrls' id="filterUrl"></textarea>
             </div>
 
             <div id='ext-parent'>
+                <b>Select Extensions To Reload</b>:     
                 <!-- Dynamic List will be created from JS -->
-                <b>Select Extensions To Reload</b>:
             </div>
 
             <div>
                 <label for="notify"><b>Allow Notifications</b>:</label>
                 <input id="notify" class="w3-check" type='checkbox' name='notify'>
             </div>
+
+            <div>
+                <h2>Task Reminder</h2><span class="tooltip" id='addTask'>&#10133;<span class="tooltiptext">Add Task</span></span>
+                <table class="w3-table w3-bordered w3-hoverable" id='taskDetails'>
+                    <thead>
+                        <tr>
+                            <th>Task Details</th>
+                            <th>Time</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- <tr>
+                            <td>January</td>
+                            <td><input type="time" name="tasktime" min="9:00" max="18:00" required></td>
+                            <td>&#10060;</td>
+                        </tr> -->
+                    </tbody>
+                </table>
+              </div>
             <div>
                 <input id="saveOptions" class='w3-btn w3-black' type="button" value="Update" />
                 <span id="showStatus" style="display: none">&#10003; Details Saved Successfully..</span>
             </div>
-
         </form>
     </div>
 

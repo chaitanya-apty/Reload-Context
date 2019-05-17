@@ -23,19 +23,24 @@ body {
     }
     textarea {
         display: block;
-        width: 10%;
+        width: 20%;
         height: 75px;
         padding: 12px 20px;
         box-sizing: border-box;
+        font-size: 15px;
         border: 2px solid #ccc;
         border-radius: 4px;
         background-color: #f8f8f8;
-        font-size: 26px;
         resize: none;
         -webkit-transition: width 0.4s, height 0.5s ease-in-out;
-        transition: width 0.4, height 0.5s ease-in-out;
+        transition: width 0.4s, height 0.5s ease-in-out;
+        transition: font-size 0.4s;
     }
     textarea:focus {
-        width: 30%;
-        height: 100px
+        width: 40%;
+        height: 100px;
+        font-size: 26px;
     }
+   h2{
+       display: inline;
+   }

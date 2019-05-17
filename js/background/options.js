@@ -13,10 +13,20 @@ const getFormKeyVal = (key) => {
     return formObject[key].value || formObject[key].innerHTML;
 }
 
+const getTaskDetailPreview  = (taskId) => {
+    return `
+    <tr id='taskDetail_${taskId}'>
+    <td contenteditable = 'true'>Click here to Edit....</td>
+    <td><input type="time" name="tasktime_${taskId}" required></td>
+    <td onclick='deleteTask(${taskId})'>&#10060;</td>
+    </tr>`;
+}
+
 const loadOptions = async () => {
     try {
         // Listen to Form Changes
         document.getElementById('saveOptions').addEventListener('click', saveOptions);
+        document.getElementById('addTask').addEventListener('click', addTask);
         
         // Fetch Stored Data
         const data = await ChromeHelpers.getStorageValue(APP_OPTIONS);
@@ -68,7 +78,7 @@ const loadExtensionsPreview = async (storedExtensions)=> {
             continue;
         }
         const label = document.createElement('label');
-        const input = document.createElement('input');
+        const input = document.createElement  ('input');
         const breakLine = document.createElement('br');
         extParentElement.appendChild(breakLine);
 
@@ -106,7 +116,18 @@ function getSelectedExtensions() {
     }, []);
     return extensionList;
 }
+
+
+function addTask() {
+var tableRef = document.getElementById('taskDetails').getElementsByTagName('tbody')[0];
+var taskId = tableRef.insertRow(tableRef.rows.length) || 0; // Insert a row in the table at the last row
+tableRef.innerHTML += getTaskDetailPreview(taskId);
+}
   
+function deleteTask(taskId) {
+ document.getElementById("taskDetails").deleteRow(taskId);
+}
+
 // On Dom Load
 document.addEventListener('DOMContentLoaded', loadOptions);
 
