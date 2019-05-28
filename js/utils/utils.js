@@ -18,10 +18,6 @@ var utilityHelpers = {
           }
       } catch(E) {console.log(E)}
     },
-    isActiveDevExtension: (currentExtDetails) => {
-        const {installType, enabled, ...rest} = currentExtDetails;
-        return installType === "development" && enabled;
-    },
     isUrlFiltered: async (url)=> {
       const urls = await ChromeHelpers.getStorageValue('filterUrls');
       for (const filter of urls) {
@@ -34,5 +30,8 @@ var utilityHelpers = {
     },
     isExtensionStored: (currentId, storedData) => {
       return !!storedData.find(store => store.id === currentId);
+    },
+    registerEventListeners: (element, event, callback) => {
+      element.addEventListener(event, callback);
     }
   }

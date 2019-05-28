@@ -23,11 +23,6 @@ var ChromeHelpers = {
             resolve();
         });
     },
-    clearStorage: ()=> {
-        if(window.isDev) {
-            localStorage.clear();
-        }
-    },
     getAllExtesions: () => {
         return new Promise((resolve, reject) => {
             chrome.management.getAll(extensionDetails => {

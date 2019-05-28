@@ -1,75 +1,75 @@
 // Default Values
-var storeDetails = {
+var storeInitialDetails = {
     filterUrls: ["http://*/*"],
     notify: true,
-    extensions: []
+    extensions: [],
+    taskDetails: []
 };
+
+var saveButton,addTaskButton;
+var filterTag,notifyTag;
+var taskTableRoot, taskTableBody;
 
 const CHECKBOX_NAME = 'installed-extension';
 
-const getFormKeyVal = (key) => {
-    const formObject = document.Options;
-    if(key === 'notify') return formObject[key].checked;
-    return formObject[key].value || formObject[key].innerHTML;
+const getElementBy = (type, selector) => {
+ switch(type) {
+    case 'id' : return document.getElementById(selector);
+    case 'class': return document.getElementsByClassName(selector)[0];
+    case 'tag': return document.getElementsByTagName(selector)[0];
+    default: return document.querySelectorAll(selector);
+ }
 }
-
-const getTaskDetailPreview  = (taskId) => {
-    return `
-    <tr id='taskDetail_${taskId}'>
-    <td contenteditable = 'true'>Click here to Edit....</td>
-    <td><input type="time" name="tasktime_${taskId}" required></td>
-    <td onclick='deleteTask(${taskId})'>&#10060;</td>
-    </tr>`;
-}
-
 const loadOptions = async () => {
     try {
-        // Listen to Form Changes
-        document.getElementById('saveOptions').addEventListener('click', saveOptions);
-        document.getElementById('addTask').addEventListener('click', addTask);
+         saveButton    = getElementBy('id','saveOptions');
+         addTaskButton = getElementBy('id','addTask');
+         filterTag     = getElementBy('id','filterUrl');
+         notifyTag     = getElementBy('id','notify');
+         taskTableRoot = getElementBy('id','taskDetails');
+         taskTableBody = taskTableRoot.getElementsByTagName('tbody')[0];
         
         // Fetch Stored Data
-        const data = await ChromeHelpers.getStorageValue(APP_OPTIONS);
-        loadExtensionsPreview(data && data.extensions || []);
-
-        const filterTag = document.getElementById('filterUrl');
-        const notifyTag = document.getElementById('notify');
-        
-        
-        if (!data) {
-            filterTag.value = storeDetails.filterUrls;
-            notifyTag.checked = storeDetails.notify;
-            ChromeHelpers.storeValue(APP_OPTIONS, storeDetails);
-            return;
-        }
-        // Retrieve Stored Values
+        var data = await ChromeHelpers.getStorageValue(APP_OPTIONS);
+        if (!data) { data = {...storeInitialDetails} }; 
+    
         filterTag.value = data.filterUrls.join();
         notifyTag.checked = data.notify;
+        loadExtensionsPreview(data.extensions);
+
+        utilityHelpers.registerEventListeners(addTaskButton, 'click', addTask);
+        utilityHelpers.registerEventListeners(saveButton, 'click', saveOptions);
     } catch(e) {
-        console.log('Failed to Retrieve Options')
+        console.log('Failed to Retrieve Options',e)
     }
 };
 
 const saveOptions = async () => {
     try {
-        const filterUrlValue = (getFormKeyVal('filterUrls') || '').split(',');
-        const notification = getFormKeyVal('notify');
+        var storeDetails = {};
+        const filterUrls = filterTag.value.split(',');
+        const notify = notifyTag.checked;
+        const extensions = getSelectedExtensions();
+        const taskDetails = getAddedTasks();
 
         // Store Details
-        storeDetails.filterUrls = filterUrlValue; 
-        storeDetails.notify = notification;
-        storeDetails.extensions = getSelectedExtensions();
+        storeDetails = {
+            ...storeDetails, 
+            filterUrls, 
+            notify,
+            extensions,
+            taskDetails
+        };
 
         await ChromeHelpers.storeValue(APP_OPTIONS,storeDetails);
         showStatus();
-        ChromeHelpers.clearStorage(); // Will not work unless Dev
     } catch (e) {
         console.log('Cannot Store Values:\n', e);
     }
 }
 
 const loadExtensionsPreview = async (storedExtensions)=> {
-    const extParentElement = document.getElementById('ext-parent');
+    const extParentElement = getElementBy('id','ext-parent');
     
     // Pulling Extensions Again From Chrome API
     const extensionsDetails = await ChromeHelpers.getAllExtesions();
@@ -98,7 +98,7 @@ const loadExtensionsPreview = async (storedExtensions)=> {
 }
 
 function showStatus() {
-    var statusMsg = document.getElementById('showStatus');
+    var statusMsg = getElementBy('id','showStatus');
     statusMsg.style.display = 'inline-block';
     setTimeout(() => {
         statusMsg.style.display = 'none';
@@ -107,26 +107,55 @@ function showStatus() {
 
 function getSelectedExtensions() {
     let extensionList = [];
-    const choosenExtensions = Array.from(document.querySelectorAll(`input[name=${CHECKBOX_NAME}]`));
-    extensionList = choosenExtensions.reduce((total, Element) => {
-        if (!Element.checked) { return total; } // Only Selected Extensions considered
-        return [...total, { 
-            id: Element.id
-        }];
-    }, []);
+    const choosenExtensions = getElementBy('all',`input[name=${CHECKBOX_NAME}]`);
+    for(const Element of choosenExtensions) {
+        if(!Element.checked) continue;
+        const elementLabel =  document.querySelector(`label[for=${Element.id}]`);
+        extensionList.push({
+            id: Element.id,
+            name: elementLabel.textContent
+        })
+    }
     return extensionList;
 }
 
+// Task Helpers
+const getTaskDetailPreview  = (taskId) => {
+    return `
+    <tr id='taskDetail_${taskId}'>
+    <td contenteditable = 'true'>Click here to Edit....</td>
+    <td><input type="time" name="tasktime_${taskId}" value="12:00:00" required></td>
+    <td name='taskDelete_${taskId}'>&#10060;</td>
+    </tr>`;
+}
 
 function addTask() {
-var tableRef = document.getElementById('taskDetails').getElementsByTagName('tbody')[0];
-var taskId = tableRef.insertRow(tableRef.rows.length) || 0; // Insert a row in the table at the last row
-tableRef.innerHTML += getTaskDetailPreview(taskId);
+var taskRows = taskTableBody.rows;
+var taskId = taskRows.length || 0; // Insert a row in the table at the last row
+taskTableBody.innerHTML += getTaskDetailPreview(taskId);
+utilityHelpers.registerEventListeners(taskRows[taskId].lastElementChild, 'click', deleteTask);
 }
   
-function deleteTask(taskId) {
- document.getElementById("taskDetails").deleteRow(taskId);
+function deleteTask(event) {
+ const deleteTarget = event.target;
+ const taskId = deleteTarget.getAttribute('name').split('_')[1];
+ taskTableBody.deleteRow(taskId);
 }
+
+function getAddedTasks() {
+  var addedTasks = [];
+  const taskRows = document.querySelectorAll('[id*="taskDetail_"]');
+  for(const task of taskRows) {
+    const taskDetailInputs = Array.from(task.cells).splice(0,2); // Hack Will Improve
+    addedTasks.push({
+        name: taskDetailInputs[0].innerText,
+        time: taskDetailInputs[1].firstElementChild.value
+    })
+    
+  }
+  return addedTasks;
+}
+// Task Helpers
 
 // On Dom Load
 document.addEventListener('DOMContentLoaded', loadOptions);
