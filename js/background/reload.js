@@ -19,16 +19,10 @@ class ReloadChromeExtension {
       if (extension.name !== 'Reload') {
         if (utilityHelpers.isExtensionStored(extension.id, storedExtensions || [])) {
           this.reloadCurrentExtension(extension.id);
-        } 
-        // else if (!storedExtensions || !storedExtensions.length) {
-        //   // If No options are Choosen ,Unpacked Extensions are reloaded 
-        //   if (utilityHelpers.isActiveDevExtension(extension)) {
-        //     this.reloadCurrentExtension(extension.id);
-        //   }
-        // }
+        }
       }
-      this.reloadActiveTab();
     }
+    this.reloadActiveTab();
   }
 
   reloadActiveTab() {

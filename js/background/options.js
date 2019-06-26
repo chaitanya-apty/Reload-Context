@@ -13,20 +13,11 @@ const getFormKeyVal = (key) => {
     return formObject[key].value || formObject[key].innerHTML;
 }
 
-const getTaskDetailPreview  = (taskId) => {
-    return `
-    <tr id='taskDetail_${taskId}'>
-    <td contenteditable = 'true'>Click here to Edit....</td>
-    <td><input type="time" name="tasktime_${taskId}" required></td>
-    <td onclick='deleteTask(${taskId})'>&#10060;</td>
-    </tr>`;
-}
-
 const loadOptions = async () => {
     try {
+        const initialiseState = Object.assign(storeDetails)
         // Listen to Form Changes
         document.getElementById('saveOptions').addEventListener('click', saveOptions);
-        document.getElementById('addTask').addEventListener('click', addTask);
         
         // Fetch Stored Data
         const data = await ChromeHelpers.getStorageValue(APP_OPTIONS);
@@ -37,16 +28,16 @@ const loadOptions = async () => {
         
         
         if (!data) {
-            filterTag.value = storeDetails.filterUrls;
-            notifyTag.checked = storeDetails.notify;
-            ChromeHelpers.storeValue(APP_OPTIONS, storeDetails);
+            filterTag.value = initialiseState.filterUrls;
+            notifyTag.checked = initialiseState.notify;
+            ChromeHelpers.storeValue(APP_OPTIONS, initialiseState);
             return;
         }
         // Retrieve Stored Values
         filterTag.value = data.filterUrls.join();
         notifyTag.checked = data.notify;
     } catch(e) {
-        console.log('Failed to Retrieve Options')
+        console.log('Failed to Retrieve Options', e)
     }
 };
 
@@ -117,16 +108,6 @@ function getSelectedExtensions() {
     return extensionList;
 }
 
-
-function addTask() {
-var tableRef = document.getElementById('taskDetails').getElementsByTagName('tbody')[0];
-var taskId = tableRef.insertRow(tableRef.rows.length) || 0; // Insert a row in the table at the last row
-tableRef.innerHTML += getTaskDetailPreview(taskId);
-}
-  
-function deleteTask(taskId) {
- document.getElementById("taskDetails").deleteRow(taskId);
-}
 
 // On Dom Load
 document.addEventListener('DOMContentLoaded', loadOptions);
