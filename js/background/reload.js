@@ -1,6 +1,3 @@
-
-const activityStates = [false, true];
-
 class ReloadChromeExtension {
   constructor() {
     chrome.browserAction.onClicked.addListener(this.reloadChromeContext.bind(this));
@@ -27,7 +24,7 @@ class ReloadChromeExtension {
 
   reloadActiveTab() {
     chrome.tabs.query({ active: true, lastFocusedWindow: true }, async (tabs) => {
-      if(tabs.length) {
+      if (tabs.length) {
         // Regex Urls || Chrome Pages will not be reloaded
         if (!tabs[0].url.includes('chrome:') && await utilityHelpers.isUrlFiltered(tabs[0].url)) {
           chrome.tabs.reload(tabs[0].id);
@@ -38,10 +35,10 @@ class ReloadChromeExtension {
   }
 
   reloadCurrentExtension(extensionId) {
-    for (const enable of activityStates) { // mimic Reloading of Extension
-      chrome.management.setEnabled(extensionId, enable);
-    }
+    chrome.management.setEnabled(extensionId, true, () => {
+      chrome.management.setEnabled(true);
+    });
   }
 }
 
-var reloadInstance = new ReloadChromeExtension();
+new ReloadChromeExtension();
