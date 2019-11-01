@@ -35,8 +35,8 @@ class ReloadChromeExtension {
   }
 
   reloadCurrentExtension(extensionId) {
-    chrome.management.setEnabled(extensionId, true, () => {
-      chrome.management.setEnabled(true);
+    chrome.management.setEnabled(extensionId, false, () => {
+      chrome.management.setEnabled(extensionId, true);
     });
   }
 }
